@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import studentRouter from './router/student.router.js';
+import courseRouter from './router/course.router.js';
 
 
 const app = express();
@@ -27,6 +28,7 @@ app.listen(port,()=>{
 app.use(bodyParser.json());
 
 app.use('/api/student', studentRouter);
+app.use('/api/course', courseRouter);
 
 
 
