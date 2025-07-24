@@ -2,6 +2,8 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import studentRouter from './router/student.router.js';
+
 
 const app = express();
 const port = 3000;
@@ -23,5 +25,9 @@ app.listen(port,()=>{
 })
 
 app.use(bodyParser.json());
+
+app.use('/api/student', studentRouter);
+
+
 
 
