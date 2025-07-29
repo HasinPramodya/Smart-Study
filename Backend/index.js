@@ -4,10 +4,12 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import studentRouter from './router/student.router.js';
 import courseRouter from './router/course.router.js';
+import cors from 'cors';
 
 
 const app = express();
 const port = 3000;
+app.use(cors());
 
 dotenv.config();
 
