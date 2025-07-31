@@ -12,7 +12,8 @@ export default function ViewCoursePage() {
     const [loaded, setLoaded] = useState(false);
     const [isAddModelDisplayed, setaddModelDisplayed] = useState(false);
     const [isEditModelDisplayed, setEditModelDisplayed] = useState(false);
-    const navigate = useNavigate();
+    const [selectedCourse, setSelectedCourse] = useState(null);
+
 
     useEffect(() => {
         if (!loaded) {
@@ -65,6 +66,7 @@ export default function ViewCoursePage() {
                                         className="text-green-500 hover:text-green-700 cursor-pointer"
                                         onClick={() => {
                                             setEditModelDisplayed(true)
+                                            setSelectedCourse(course);
                                         }
                                         }
                                     />
@@ -87,7 +89,7 @@ export default function ViewCoursePage() {
 
 
             {isAddModelDisplayed && (
-                <div className="fixed inset-0 bg-black bg-opacity-30 z-50 flex justify-center items-center">
+                <div className="fixed inset-0 bg-[#00000070] bg-opacity-30 z-50 flex justify-center items-center">
                     <div className="relative bg-white w-[500px] max-w-[90%] max-h-[90%] rounded-lg shadow-lg p-6">
 
                         <button
@@ -106,7 +108,7 @@ export default function ViewCoursePage() {
                 </div>
             )}
             {isEditModelDisplayed && (
-                <div className="fixed inset-0 bg-black bg-opacity-30 z-50 flex justify-center items-center">
+                <div className="fixed inset-0 bg-[#00000070] bg-opacity-30 z-50 flex justify-center items-center">
                     <div className="relative bg-white w-[500px] max-w-[90%] max-h-[90%] rounded-lg shadow-lg p-6">
 
                         <button
@@ -115,7 +117,7 @@ export default function ViewCoursePage() {
                         >
                             <CircleX size={24}/>
                         </button>
-                        <EditCoursePage onClose={()=>{
+                        <EditCoursePage course={selectedCourse} onClose={()=>{
                             setEditModelDisplayed(false);
                             setLoaded(false);
                         }}/>
