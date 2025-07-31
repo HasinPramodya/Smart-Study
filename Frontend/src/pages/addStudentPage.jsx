@@ -7,12 +7,11 @@ export default function AddStudentPage({onClose}) {
     const [address,setAddress] = useState("");
     const [email,setEmail] = useState("");
     const [phoneNo,setPhoneNo] = useState("");
-    const [courseDetails, setCourseDetails] = useState([]);
     const [courseId, setCourseId] = useState("");
     const [courseName, setCourseName] = useState("");
     const [gradeAchieved, setGradeAchieved] = useState("");
-    const [MARKS, setMARKS] = useState("");
-    const [isAddModelDisplayed, setAddModelDisplayed] = useState(false);
+    const [marks, setMarks] = useState("");
+    const [isAddModelDisplayed,setIsAddModelDisplayed] = useState(false);
 
     function handleaddStudent() {
 
@@ -25,7 +24,7 @@ export default function AddStudentPage({onClose}) {
                 courseId: courseId,
                 courseName: courseName,
                 grade: gradeAchieved,
-                MARKS: MARKS
+                marks: marks
             }
         }).then((res)=>{
             console.log(res.data.message);
@@ -110,13 +109,13 @@ export default function AddStudentPage({onClose}) {
                             Marks
                         </label>
                         <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" placeholder="Marks" onChange={(e)=>{
-                            setMARKS(e.target.value)
+                            setMarks(e.target.value)
                         }}/>
                     </div>
 
                     <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onClick={()=>{
                         handleaddStudent();
-                        setAddModelDisplayed(false);
+                        setIsAddModelDisplayed(false);
                     }}>
                         Add Student
                     </button>
