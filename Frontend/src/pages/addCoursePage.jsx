@@ -3,9 +3,9 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 export default function AddCoursePage({onClose}) {
 
-    const [courseId, setCourseId] = useState('');
     const [courseName, setCourseName] = useState('');
     const [courseDescription, setCourseDescription] = useState('');
+    const [isAddModelDisplayed, setAddModelDisplayed] = useState(false);
 
     function handleAddCourse() {
         axios.post(import.meta.env.VITE_BACKEND_URL + "/api/course", {
@@ -50,7 +50,10 @@ export default function AddCoursePage({onClose}) {
                         }}></textarea>
                     </div>
                     <div className="flex items-center justify-between">
-                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onClick={handleAddCourse}>
+                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onClick={()=>{
+                            handleAddCourse();
+                            setAddModelDisplayed(false);
+                        }}>
                             Add Course
                         </button>
                     </div>
