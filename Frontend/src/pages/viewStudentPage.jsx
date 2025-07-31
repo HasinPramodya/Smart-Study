@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Trash2, Pencil, CircleX } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import CircularIndeterminate from "../component/loader.jsx";
 import FloatingActionButtonSize from "../component/actionButton.jsx";
 import AddStudentPage from "./addStudentPage.jsx";
-import EditCoursePage from "./editCoursePage.jsx";
 import EditStudentPage from "./editStudentPage.jsx";
 import CourseDetail from "../component/courseDetail.jsx";
 
@@ -24,6 +22,7 @@ export default function ViewStudentPage() {
             axios.get(import.meta.env.VITE_BACKEND_URL + "/api/student")
                 .then((res) => {
                     setStudents(res.data.Students);
+
                     setLoaded(true);
                 })
                 .catch((err) => {
@@ -81,8 +80,9 @@ export default function ViewStudentPage() {
                                     <Pencil
                                         className="text-green-500 hover:text-green-700 cursor-pointer"
                                         onClick={() => {
-                                            setStudent(student);
+
                                             setEditModelDisplayed(true);
+                                            setStudent(student);
                                         }}
                                     />
                                 </div>
