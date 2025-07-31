@@ -7,13 +7,17 @@ import FloatingActionButtonSize from "../component/actionButton.jsx";
 import AddStudentPage from "./addStudentPage.jsx";
 import EditCoursePage from "./editCoursePage.jsx";
 import EditStudentPage from "./editStudentPage.jsx";
+import CourseDetail from "../component/courseDetail.jsx";
+
 
 export default function ViewStudentPage() {
     const [students, setStudents] = useState([]);
     const [loaded, setLoaded] = useState(false);
     const [isAddModelDisplayed, setAddModelDisplayed] = useState(false);
     const [isEditModelDisplayed, setEditModelDisplayed] = useState(false);
-    const navigate = useNavigate();
+    const [isCourseDetailsModelDisplayed, setCourseDetailsModelDisplayed] = useState(false);
+    const [Student,setStudent] = useState([null]);
+
 
     useEffect(() => {
         if (!loaded) {
@@ -63,7 +67,11 @@ export default function ViewStudentPage() {
                             <td className="p-3 border">{student.address}</td>
                             <td className="p-3 border">{student.email}</td>
                             <td className="p-3 border">{student.phoneNo}</td>
-                            {/*<td className="p-3 border">{student.course_details}</td>*/}
+                            <td className="p-3 border"><button className={"bg-gray-700 text-white p-2 rounded-lg"} onClick={()=>{
+                                setCourseDetailsModelDisplayed(true);
+                                setStudent(student);
+
+                            }}>Course Details</button></td>
                             <td className="p-3 border">
                                 <div className="flex gap-3 justify-center">
                                     <Trash2
@@ -73,6 +81,7 @@ export default function ViewStudentPage() {
                                     <Pencil
                                         className="text-green-500 hover:text-green-700 cursor-pointer"
                                         onClick={() => {
+                                            setStudent(student);
                                             setEditModelDisplayed(true);
                                         }}
                                     />
@@ -94,7 +103,7 @@ export default function ViewStudentPage() {
 
 
             {isAddModelDisplayed && (
-                <div className="fixed inset-0 bg-black bg-opacity-30 z-50 flex justify-center items-center">
+                <div className="fixed inset-0 bg-[#00000070] bg-opacity-30 z-50 flex justify-center items-center">
                     <div className="relative bg-white w-[500px] max-w-[90%] max-h-[90%] rounded-lg shadow-lg">
 
                         <button
@@ -115,22 +124,54 @@ export default function ViewStudentPage() {
             )}
 
             {isEditModelDisplayed && (
-                <div className="fixed inset-0 bg-black bg-opacity-30 z-50 flex justify-center items-center">
-                    <div className="relative bg-white w-[500px] max-w-[90%] max-h-[90%] rounded-lg shadow-lg p-6">
+                <div className="fixed inset-0 bg-[#00000070] bg-opacity-30 z-50 flex justify-center items-center">
+                    <div className="relative bg-white w-[500px] max-w-[95%] max-h-[90vh] rounded-lg shadow-lg overflow-y-auto p-6">
+
 
                         <button
-                            className="absolute top-3 right-3 text-gray-500 hover:text-red-600"
+                            className="absolute top-3 right-3 text-gray-500 hover:text-red-600 z-10"
                             onClick={() => setEditModelDisplayed(false)}
                         >
-                            <CircleX size={24}/>
+                            <CircleX size={24} />
                         </button>
-                        <EditStudentPage onClose={()=>{
-                            setEditModelDisplayed(false);
-                            setLoaded(false);
-                        }}/>
+
+
+                        <div className="pt-10">
+                            <EditStudentPage student={Student}
+                                onClose={() => {
+                                    setEditModelDisplayed(false);
+                                    setLoaded(false);
+                                }}
+                            />
+                        </div>
                     </div>
                 </div>
             )}
+
+
+
+
+            {
+                isCourseDetailsModelDisplayed && (
+                    <div className="fixed inset-0 bg-[#00000070] bg-opacity-30 z-50 flex justify-center items-center">
+                        <div className="relative bg-white w-[500px] max-w-[90%] max-h-[90%] rounded-lg shadow-lg p-6">
+                            <button
+                                className="absolute top-3 right-3 text-gray-500 hover:text-red-600"
+                                onClick={() => setCourseDetailsModelDisplayed(false)}
+                            >
+                                <CircleX size={24}/>
+                            </button>
+                            <CourseDetail
+                                student={Student}
+                                onClose={() => {
+                                    setCourseDetailsModelDisplayed(false);
+                                }}
+                            />
+
+                        </div>
+                    </div>
+                )
+            }
         </div>
     );
 }
