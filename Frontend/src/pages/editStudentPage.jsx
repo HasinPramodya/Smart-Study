@@ -1,127 +1,162 @@
-import {useState} from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
-export default function EditStudentPage({onClose}) {
 
-    const [name,setName] = useState("");
-    const [address,setAddress] = useState("");
-    const [email,setEmail] = useState("");
-    const [phoneNo,setPhoneNo] = useState("");
-    const [courseDetails, setCourseDetails] = useState([]);
+export default function EditStudentPage({ onClose, student }) {
+    const [name, setName] = useState("");
+    const [address, setAddress] = useState("");
+    const [email, setEmail] = useState("");
+    const [phoneNo, setPhoneNo] = useState("");
     const [courseId, setCourseId] = useState("");
     const [courseName, setCourseName] = useState("");
     const [gradeAchieved, setGradeAchieved] = useState("");
     const [MARKS, setMARKS] = useState("");
-    const [isModelDisplayed, setModelDisplayed] = useState(false);
 
-    function handleaddStudent() {
+    useEffect(() => {
+        if (student) {
+            setName(student.name || "");
+            setAddress(student.address || "");
+            setEmail(student.email || "");
+            setPhoneNo(student.phoneNo || "");
 
-        axios.post(import.meta.env.VITE_BACKEND_URL + "/api/student", {
-            name: name,
-            address: address,
-            email: email,
-            phoneNo: phoneNo,
-            course_details: {
-                courseId: courseId,
-                courseName: courseName,
-                grade: gradeAchieved,
-                MARKS: MARKS
-            }
-        }).then((res)=>{
-            console.log(res.data.message);
-            toast.success("Student added successfully");
-            onClose();
-        }).catch((error)=>{
-            console.log(error.response.message);
-            toast.error("Something went wrong, please try again");
-        })
+
+            const course = student.course_details || {};
+            console.log(course);
+            setCourseId(course.courseId || "");
+            setCourseName(course.courseName || "");
+            setGradeAchieved(course.grade || "");
+            setMARKS(course.marks || "");
+        }
+    }, [student]);
+
+    function handleEditStudent() {
+        axios
+            .put(import.meta.env.VITE_BACKEND_URL + "/api/student/" + student.regNo, {
+                name,
+                address,
+                email,
+                phoneNo,
+                course_details: {
+                    courseId,
+                    courseName,
+                    grade: gradeAchieved,
+                    MARKS,
+                },
+            })
+            .then((res) => {
+                toast.success("Student updated successfully");
+                onClose();
+            })
+            .catch((error) => {
+                console.log(error?.response?.data?.message || error.message);
+                toast.error("Something went wrong, please try again");
+            });
     }
 
-    return(
-        <>
+    return (
+        <div className="h-full overflow-y-auto">
             <div className="container mx-auto flex flex-col items-center justify-center">
-                <h1 className="text-3xl font-bold mb-4">
-                    Edit Student
-                </h1>
+                <h1 className="text-3xl font-bold mb-4">Edit Student</h1>
                 <form className="w-full max-w-lg">
                     <div className="mb-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                            Name
-                        </label>
-                        <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" placeholder="Student Name" onChange={(e)=>{
-                            setName(e.target.value)
-                        }}/>
-                    </div>
-                    <div className="mb-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                            Address
-                        </label>
-                        <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" placeholder="Student Address" onChange={(e)=>{
-                            setAddress(e.target.value)
-                        }}/>
-                    </div>
-                    <div className="mb-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                            Email
-                        </label>
-                        <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" placeholder="Student Email" onChange={(e)=>{
-                            setEmail(e.target.value)
-                        }}/>
-                    </div>
-                    <div className="mb-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                            Phone No
-                        </label>
-                        <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" placeholder="Student PhoneNo" onChange={(e)=>{
-                            setPhoneNo(e.target.value)
-                        }}/>
-                    </div>
-
-
-                    <div className="mb-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                            Course Id
-                        </label>
-                        <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" placeholder="Course Id" onChange={(e)=>{
-                            setCourseId(e.target.value)
-                        }}/>
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Name</label>
+                        <input
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            className="shadow border rounded w-full py-2 px-3"
+                            type="text"
+                            placeholder="Student Name"
+                        />
                     </div>
 
                     <div className="mb-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                            Course Name
-                        </label>
-                        <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" placeholder="CourseName" onChange={(e)=>{
-                            setCourseName(e.target.value)
-                        }}/>
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Address</label>
+                        <input
+                            value={address}
+                            onChange={(e) => setAddress(e.target.value)}
+                            className="shadow border rounded w-full py-2 px-3"
+                            type="text"
+                            placeholder="Address"
+                        />
                     </div>
 
                     <div className="mb-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                            Grade Achieved
-                        </label>
-                        <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" placeholder="Grade Achived" onChange={(e)=>{
-                            setGradeAchieved(e.target.value)
-                        }}/>
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                        <input
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="shadow border rounded w-full py-2 px-3"
+                            type="email"
+                            placeholder="Email"
+                        />
                     </div>
 
                     <div className="mb-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                            Marks
-                        </label>
-                        <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" placeholder="Marks" onChange={(e)=>{
-                            setMARKS(e.target.value)
-                        }}/>
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Phone No</label>
+                        <input
+                            value={phoneNo}
+                            onChange={(e) => setPhoneNo(e.target.value)}
+                            className="shadow border rounded w-full py-2 px-3"
+                            type="text"
+                            placeholder="Phone Number"
+                        />
                     </div>
 
-                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onClick={()=>{
-                        handleaddStudent();
-                        setModelDisplayed(false);
-                    }}>
-                        Edit
-                    </button>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Course ID</label>
+                        <input
+                            value={courseId}
+                            onChange={(e) => setCourseId(e.target.value)}
+                            className="shadow border rounded w-full py-2 px-3"
+                            type="text"
+                            placeholder="Course ID"
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Course Name</label>
+                        <input
+                            value={courseName}
+                            onChange={(e) => setCourseName(e.target.value)}
+                            className="shadow border rounded w-full py-2 px-3"
+                            type="text"
+                            placeholder="Course Name"
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Grade Achieved</label>
+                        <input
+                            value={gradeAchieved}
+                            onChange={(e) => setGradeAchieved(e.target.value)}
+                            className="shadow border rounded w-full py-2 px-3"
+                            type="text"
+                            placeholder="Grade"
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Marks</label>
+                        <input
+                            value={MARKS}
+                            onChange={(e) => setMARKS(e.target.value)}
+                            className="shadow border rounded w-full py-2 px-3"
+                            type="number"
+                            placeholder="Marks"
+                        />
+                    </div>
+
+                    <div className="flex justify-end">
+                        <button
+                            type="button"
+                            onClick={handleEditStudent}
+                            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+                        >
+                            Save
+                        </button>
+                    </div>
                 </form>
             </div>
-        </>
-    )
+        </div>
+    );
 }
