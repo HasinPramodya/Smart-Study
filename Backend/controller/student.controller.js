@@ -1,9 +1,30 @@
 import Student from "../model/student.model.js";
+import Course from "../model/course.model.js";
 
 export async function createStudent(req, res) {
 
     try{
-        await new Student(req.body).save();
+        let newRegNo;
+        const lastStudent = await Student.find().sort({regNo: -1}).limit(1)
+        if(lastStudent.length == 0){
+            newRegNo = "S001";
+        }else{
+            const lastRegNo = lastStudent[0].regNo;
+            const lastRegNONumber = parseInt(lastRegNo.replace("S00", ""));
+            const newRegNONumber = lastRegNONumber + 1;
+            newRegNo = "S" + newRegNONumber.toString().padStart(3, '0');
+
+        }
+       const student = await new Student({
+            regNo: newRegNo,
+            name: req.body.name,
+            address: req.body.address,
+            email: req.body.email,
+            phoneNo: req.body.phoneNo,
+            course_details : req.body.course_details
+        })
+        console.log(student)
+        student.save();
         res.status(201).json({
             message: "Student Created Successfully"
         })

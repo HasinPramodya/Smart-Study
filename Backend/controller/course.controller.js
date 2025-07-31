@@ -3,7 +3,22 @@ import Course from "../model/course.model.js";
 export  async function createCourse(req, res) {
 
     try{
-        await new Course(req.body).save();
+        let newCourseId;
+        const lastCourse = await Course.find().sort({courseId: -1}).limit(1)
+        if(lastCourse.length == 0){
+            newCourseId = "C001";
+        }else{
+            const lastCourseId = lastCourse[0].courseId;
+            const lastCourseNumber = parseInt(lastCourseId.replace("C00", ""));
+            const newCourseNumber = lastCourseNumber + 1;
+            newCourseId = "C" + newCourseNumber.toString().padStart(3, '0');
+
+        }
+        await new Course({
+            courseId: newCourseId,
+            name: req.body.name,
+            description: req.body.description
+        }).save()
         res.status(200).json(
             {
                 message : "Course Created Successfully"
